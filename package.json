@@ -1,0 +1,28 @@
+{
+  "name": "woodpecker-npm",
+  "version": "1.0.0",
+  "description": "publish package by npm for woodpecker-ci",
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woodpecker-kit/woodpecker-npm.git"
+  },
+  "keywords": [
+    "go",
+    "make",
+    "docker",
+    "action"
+  ],
+  "author": {
+    "name": "woodpecker-kit",
+    "email": "",
+    "url": "https://github.com/woodpecker-kit/woodpecker-npm"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/woodpecker-kit/woodpecker-npm/issues"
+  },
+  "homepage": "https://github.com/woodpecker-kit/woodpecker-npm#readme"
+}
