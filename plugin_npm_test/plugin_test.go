@@ -87,11 +87,15 @@ func TestPlugin(t *testing.T) {
 	}
 	t.Log("mock NpmPlugin")
 	p := mockPluginWithStatus(t, wd_info.BuildStatusSuccess)
-	//wd_log.VerboseJsonf(p, "print plugin_npm info")
 
 	t.Log("mock plugin_npm config")
 
-	// remove or change this code
+	//
+	p.Settings.Registry = valEnvRegistry
+	p.Settings.Username = valEnvNpmUsername
+	p.Settings.Password = valEnvNpmPassword
+	p.Settings.Email = valEnvNpmEmail
+	p.Settings.Token = valEnvNpmToken
 
 	// statusSuccess
 	var statusSuccess plugin_npm.NpmPlugin
