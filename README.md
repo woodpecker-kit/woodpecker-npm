@@ -11,7 +11,7 @@
 
 ## for what
 
-- this project used to woodpecker plugin
+- this project used to woodpecker-ci for npm publish
 
 ## Contributing
 
