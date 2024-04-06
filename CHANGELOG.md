@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.0.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.0.0...v1.0.1) (2024-04-07)
+
+### 🐛 Bug Fixes
+
+* fix whoami check by custom `npm-registry` ([71a87dce](https://github.com/woodpecker-kit/woodpecker-npm/commit/71a87dcedf043a7829f776d6a69fdf332f88c3f1))
+
 ## 1.0.0 (2024-04-06)
 
 ### ✨ Features
