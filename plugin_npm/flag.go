@@ -5,6 +5,7 @@ import (
 	"github.com/woodpecker-kit/woodpecker-tools/wd_flag"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_info"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_log"
+	"github.com/woodpecker-kit/woodpecker-tools/wd_short_info"
 )
 
 const (
@@ -111,8 +112,13 @@ func HideGlobalFlag() []cli.Flag {
 	return []cli.Flag{}
 }
 
-func BindCliFlags(c *cli.Context, cliName, cliVersion string, wdInfo *wd_info.WoodpeckerInfo, rootPath, stepsTransferPath string, stepsOutDisable bool) (*NpmPlugin, error) {
-	debug := isBuildDebugOpen(c)
+func BindCliFlags(c *cli.Context,
+	debug bool,
+	cliName, cliVersion string,
+	wdInfo *wd_info.WoodpeckerInfo,
+	rootPath,
+	stepsTransferPath string, stepsOutDisable bool,
+) (*NpmPlugin, error) {
 
 	config := Settings{
 		Debug:             debug,
@@ -142,18 +148,15 @@ func BindCliFlags(c *cli.Context, cliName, cliVersion string, wdInfo *wd_info.Wo
 
 	wd_log.Debugf("args %s: %v", wd_flag.NameCliPluginTimeoutSecond, config.TimeoutSecond)
 
+	infoShort := wd_short_info.ParseWoodpeckerInfo2Short(*wdInfo)
+
 	p := NpmPlugin{
 		Name:           cliName,
 		Version:        cliVersion,
-		WoodpeckerInfo: wdInfo,
+		woodpeckerInfo: wdInfo,
+		wdShortInfo:    &infoShort,
 		Settings:       config,
 	}
 
 	return &p, nil
-}
-
-// isBuildDebugOpen
-// when config or build open debug will open debug
-func isBuildDebugOpen(c *cli.Context) bool {
-	return c.Bool(wd_flag.NameCliPluginDebug)
 }

@@ -145,6 +145,14 @@ type PkgJson struct {
 	// Homepage
 	//
 	Homepage string `json:"homepage,omitempty"`
+
+	// PublishConfig
+	// config of publish
+	PublishConfig NpmConfig `json:"publishConfig,omitempty"`
+}
+
+type NpmConfig struct {
+	Registry string `json:"registry,omitempty"`
 }
 
 // Directories

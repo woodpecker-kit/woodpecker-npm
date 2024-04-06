@@ -1,72 +1,99 @@
 package plugin_npm_test
 
 import (
-	"encoding/json"
+	"github.com/sinlov-go/unittest-kit/unittest_file_kit"
+	"github.com/woodpecker-kit/woodpecker-npm/internal/pkgJson"
 	"github.com/woodpecker-kit/woodpecker-npm/plugin_npm"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_info"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_log"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_mock"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_short_info"
-	"github.com/woodpecker-kit/woodpecker-tools/wd_steps_transfer"
+	"path/filepath"
+	"strings"
 	"testing"
 )
 
 func TestCheckArgsPlugin(t *testing.T) {
 	t.Log("mock NpmPlugin")
-	p := mockPluginWithStatus(t, wd_info.BuildStatusSuccess)
 
 	// statusSuccess
-	var statusSuccess plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &statusSuccess)
-	statusSuccess.Settings.Username = "foo"
-	statusSuccess.Settings.Password = "bar"
-	statusSuccess.Settings.Email = "bar"
+	statusSuccessWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	statusSuccessSettings := mockPluginSettings()
+	statusSuccessSettings.Username = "foo"
+	statusSuccessSettings.Password = "bar"
+	statusSuccessSettings.Email = "baz"
+
+	// registryError
+	registryErrorWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	registryErrorSettings := mockPluginSettings()
+	registryErrorSettings.Registry = "some////foo.org"
+	registryErrorSettings.Username = "foo"
+	registryErrorSettings.Password = "bar"
+	registryErrorSettings.Email = "baz"
 
 	// statusNotSupport
-	var statusNotSupport plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &statusNotSupport)
-	statusNotSupport.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
+	statusNotSupportWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
 		wd_mock.FastCurrentStatus("not_support"),
 	)
+	statusNotSupportSettings := mockPluginSettings()
 
 	// noArgsUsername
-	var noArgsUsername plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &noArgsUsername)
-	noArgsUsername.Settings.Username = ""
+	noArgsUsernameWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	noArgsUsernameSettings := mockPluginSettings()
+	noArgsUsernameSettings.Username = ""
 
 	tests := []struct {
-		name              string
-		p                 plugin_npm.NpmPlugin
+		name           string
+		woodpeckerInfo wd_info.WoodpeckerInfo
+		settings       plugin_npm.Settings
+
 		isDryRun          bool
-		workRoot          string
 		wantArgFlagNotErr bool
 	}{
 		{
 			name:              "statusSuccess",
-			p:                 statusSuccess,
+			woodpeckerInfo:    statusSuccessWoodpeckerInfo,
+			settings:          statusSuccessSettings,
 			wantArgFlagNotErr: true,
 		},
 		{
-			name: "statusNotSupport",
-			p:    statusNotSupport,
+			name:              "registryError",
+			woodpeckerInfo:    registryErrorWoodpeckerInfo,
+			settings:          registryErrorSettings,
+			wantArgFlagNotErr: true,
 		},
 		{
-			name: "noArgsUsername",
-			p:    noArgsUsername,
+			name:           "statusNotSupport",
+			woodpeckerInfo: statusNotSupportWoodpeckerInfo,
+			settings:       statusNotSupportSettings,
+		},
+		{
+			name:           "noArgsUsername",
+			woodpeckerInfo: noArgsUsernameWoodpeckerInfo,
+			settings:       noArgsUsernameSettings,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			tc.p.OnlyArgsCheck()
-			errPluginRun := tc.p.Exec()
+			p := mockPluginWithSettings(t, tc.woodpeckerInfo, tc.settings)
+			p.OnlyArgsCheck()
+			errPluginRun := p.Exec()
 			if tc.wantArgFlagNotErr {
 				if errPluginRun != nil {
-					wdShotInfo := wd_short_info.ParseWoodpeckerInfo2Short(*tc.p.WoodpeckerInfo)
+					wdShotInfo := wd_short_info.ParseWoodpeckerInfo2Short(p.GetWoodPeckerInfo())
 					wd_log.VerboseJsonf(wdShotInfo, "print WoodpeckerInfoShort")
-					wd_log.VerboseJsonf(tc.p.Settings, "print Settings")
+					wd_log.VerboseJsonf(p.Settings, "print Settings")
 					t.Fatalf("wantArgFlagNotErr %v\np.Exec() error:\n%v", tc.wantArgFlagNotErr, errPluginRun)
 					return
 				}
+				infoShot := p.ShortInfo()
+				wd_log.VerboseJsonf(infoShot, "print WoodpeckerInfoShort")
 			} else {
 				if errPluginRun == nil {
 					t.Fatalf("test case [ %s ], wantArgFlagNotErr %v, but p.Exec() not error", tc.name, tc.wantArgFlagNotErr)
@@ -85,79 +112,85 @@ func TestPlugin(t *testing.T) {
 	if envMustArgsCheck(t) {
 		return
 	}
-	t.Log("mock NpmPlugin")
-	p := mockPluginWithStatus(t, wd_info.BuildStatusSuccess)
 
-	t.Log("mock plugin_npm config")
-
-	//
-	p.Settings.Registry = valEnvRegistry
-	p.Settings.Username = valEnvNpmUsername
-	p.Settings.Password = valEnvNpmPassword
-	p.Settings.Email = valEnvNpmEmail
-	p.Settings.Token = valEnvNpmToken
+	testCaseRootPath, errCreateTestCaseRootPath := testGoldenKit.GetOrCreateTestDataFullPath("plugin_npm")
+	if errCreateTestCaseRootPath != nil {
+		t.Fatal(errCreateTestCaseRootPath)
+	}
 
 	// statusSuccess
-	var statusSuccess plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &statusSuccess)
+	statusSuccessWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "statusSuccess")),
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	statusSuccessSettings := mockPluginSettings()
 
 	// statusFailure
-	var statusFailure plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &statusFailure)
-	statusFailure.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
+	statusFailureWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "statusFailure")),
 		wd_mock.FastCurrentStatus(wd_info.BuildStatusFailure),
 	)
+	statusFailureSettings := mockPluginSettings()
 
 	// tagPipeline
-	var tagPipeline plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &tagPipeline)
-	tagPipeline.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
+	tagPipelineWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "tagPipeline")),
 		wd_mock.FastTag("v1.0.0", "new tag"),
 	)
+	tagPipelineSettings := mockPluginSettings()
 
 	// pullRequestPipeline
-	var pullRequestPipeline plugin_npm.NpmPlugin
-	deepCopyByPlugin(&p, &pullRequestPipeline)
-	pullRequestPipeline.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
+	pullRequestPipelineWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "pullRequestPipeline")),
 		wd_mock.FastPullRequest("1", "new pr", "feature-support", "main", "main"),
 	)
+	pullRequestPipelineSettings := mockPluginSettings()
 
 	tests := []struct {
-		name            string
-		p               plugin_npm.NpmPlugin
-		isDryRun        bool
-		workRoot        string
+		name           string
+		woodpeckerInfo wd_info.WoodpeckerInfo
+		settings       plugin_npm.Settings
+		workRoot       string
+
 		ossTransferKey  string
 		ossTransferData interface{}
-		wantErr         bool
+
+		isDryRun bool
+		wantErr  bool
 	}{
 		{
-			name: "statusSuccess",
-			p:    statusSuccess,
+			name:           "statusSuccess",
+			woodpeckerInfo: statusSuccessWoodpeckerInfo,
+			settings:       statusSuccessSettings,
+			isDryRun:       true,
 		},
 		{
-			name:     "statusFailure",
-			p:        statusFailure,
-			isDryRun: true,
+			name:           "statusFailure",
+			woodpeckerInfo: statusFailureWoodpeckerInfo,
+			settings:       statusFailureSettings,
+			isDryRun:       true,
 		},
 		{
-			name:     "tagPipeline",
-			p:        tagPipeline,
-			isDryRun: true,
+			name:           "tagPipeline",
+			woodpeckerInfo: tagPipelineWoodpeckerInfo,
+			settings:       tagPipelineSettings,
+			isDryRun:       true,
 		},
 		{
-			name:     "pullRequestPipeline",
-			p:        pullRequestPipeline,
-			isDryRun: true,
+			name:           "pullRequestPipeline",
+			woodpeckerInfo: pullRequestPipelineWoodpeckerInfo,
+			settings:       pullRequestPipelineSettings,
+			isDryRun:       true,
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			tc.p.Settings.DryRun = tc.isDryRun
-			if tc.workRoot != "" {
-				tc.p.Settings.RootPath = tc.workRoot
+			p := mockPluginWithSettings(t, tc.woodpeckerInfo, tc.settings)
+			p.Settings.DryRun = tc.isDryRun
+			p.SetMockUserHome(p.Settings.RootPath)
+			if tc.ossTransferKey != "" {
 				errGenTransferData := generateTransferStepsOut(
-					tc.p,
+					p,
 					tc.ossTransferKey,
 					tc.ossTransferData,
 				)
@@ -165,7 +198,14 @@ func TestPlugin(t *testing.T) {
 					t.Fatal(errGenTransferData)
 				}
 			}
-			err := tc.p.Exec()
+			if p.Settings.Registry != "" {
+				errMockPackageJsonFile := mockPackageJsonFile(p.Settings.RootPath, tc.name, p.Settings.Registry)
+				if errMockPackageJsonFile != nil {
+					t.Fatal(errMockPackageJsonFile)
+				}
+			}
+
+			err := p.Exec()
 			if (err != nil) != tc.wantErr {
 				t.Errorf("FeishuPlugin.Exec() error = %v, wantErr %v", err, tc.wantErr)
 				return
@@ -174,39 +214,14 @@ func TestPlugin(t *testing.T) {
 	}
 }
 
-func mockPluginWithStatus(t *testing.T, status string) plugin_npm.NpmPlugin {
-	p := plugin_npm.NpmPlugin{
-		Name:    mockName,
-		Version: mockVersion,
+func mockPackageJsonFile(root, pkgName string, registry string) error {
+	pkgData := pkgJson.PkgJson{
+		Name:    strings.ToLower(pkgName),
+		Version: "1.0.0",
+		PublishConfig: pkgJson.NpmConfig{
+			Registry: registry,
+		},
 	}
-	// use env:PLUGIN_DEBUG
-	p.Settings.Debug = valEnvPluginDebug
-	p.Settings.TimeoutSecond = envTimeoutSecond
-	p.Settings.RootPath = testGoldenKit.GetTestDataFolderFullPath()
-	p.Settings.StepsTransferPath = wd_steps_transfer.DefaultKitStepsFileName
-
-	// mock woodpecker info
-	//t.Log("mockPluginWithStatus")
-	woodpeckerInfo := wd_mock.NewWoodpeckerInfo(
-		wd_mock.FastCurrentStatus(status),
-	)
-	p.WoodpeckerInfo = woodpeckerInfo
-
-	// mock all config at here
-
-	return p
-}
-
-func deepCopyByPlugin(src, dst *plugin_npm.NpmPlugin) {
-	if tmp, err := json.Marshal(&src); err != nil {
-		return
-	} else {
-		err = json.Unmarshal(tmp, dst)
-		return
-	}
-}
-
-func generateTransferStepsOut(plugin plugin_npm.NpmPlugin, mark string, data interface{}) error {
-	_, err := wd_steps_transfer.Out(plugin.Settings.RootPath, plugin.Settings.StepsTransferPath, *plugin.WoodpeckerInfo, mark, data)
-	return err
+	pkgJsonPath := filepath.Join(root, "package.json")
+	return unittest_file_kit.WriteFileAsJsonBeauty(pkgJsonPath, pkgData, true)
 }

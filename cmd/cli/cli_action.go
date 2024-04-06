@@ -70,7 +70,13 @@ func GlobalBeforeAction(c *cli.Context) error {
 	stepsTransferFilePath := c.String(constant.NameCliPluginStepsTransferFilePath)
 	stepsOutDisable := c.Bool(constant.NameCliPluginStepsTransferDisableOut)
 
-	pluginBind, errBindPlugin := plugin_npm.BindCliFlags(c, namePlugin, cliVersion, &woodpeckerInfo, rootPath, stepsTransferFilePath, stepsOutDisable)
+	pluginBind, errBindPlugin := plugin_npm.BindCliFlags(c,
+		isDebug,
+		namePlugin, cliVersion,
+		&woodpeckerInfo,
+		rootPath,
+		stepsTransferFilePath, stepsOutDisable,
+	)
 	if errBindPlugin != nil {
 		return cli_exit_urfave.Err(errBindPlugin)
 	}

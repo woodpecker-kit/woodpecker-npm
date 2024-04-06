@@ -6,7 +6,9 @@ import (
 	"github.com/sinlov-go/unittest-kit/unittest_file_kit"
 	"github.com/woodpecker-kit/woodpecker-npm/plugin_npm"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_flag"
+	"github.com/woodpecker-kit/woodpecker-tools/wd_info"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_log"
+	"github.com/woodpecker-kit/woodpecker-tools/wd_steps_transfer"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -107,4 +109,46 @@ func envMustArgsCheck(t *testing.T) bool {
 		}
 	}
 	return false
+}
+
+func generateTransferStepsOut(plugin plugin_npm.NpmPlugin, mark string, data interface{}) error {
+	_, err := wd_steps_transfer.Out(plugin.Settings.RootPath, plugin.Settings.StepsTransferPath, plugin.GetWoodPeckerInfo(), mark, data)
+	return err
+}
+
+func mockPluginSettings() plugin_npm.Settings {
+	// all mock settings can set here
+	settings := plugin_npm.Settings{
+		// use env:PLUGIN_DEBUG
+		Debug:             valEnvPluginDebug,
+		TimeoutSecond:     envTimeoutSecond,
+		RootPath:          testGoldenKit.GetTestDataFolderFullPath(),
+		StepsTransferPath: wd_steps_transfer.DefaultKitStepsFileName,
+	}
+
+	settings.Registry = valEnvRegistry
+	settings.Username = valEnvNpmUsername
+	settings.Password = valEnvNpmPassword
+	settings.Email = valEnvNpmEmail
+	settings.Token = valEnvNpmToken
+
+	return settings
+}
+
+func mockPluginWithSettings(t *testing.T, woodpeckerInfo wd_info.WoodpeckerInfo, settings plugin_npm.Settings) plugin_npm.NpmPlugin {
+	p := plugin_npm.NpmPlugin{
+		Name:    mockName,
+		Version: mockVersion,
+	}
+
+	// mock woodpecker info
+	//t.Log("mockPluginWithStatus")
+	p.SetWoodpeckerInfo(woodpeckerInfo)
+
+	if p.ShortInfo().Build.WorkSpace != "" {
+		settings.RootPath = p.ShortInfo().Build.WorkSpace
+	}
+
+	p.Settings = settings
+	return p
 }
