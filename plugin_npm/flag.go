@@ -48,7 +48,7 @@ func GlobalFlag() []cli.Flag {
 	return []cli.Flag{
 		&cli.StringFlag{
 			Name:    CliNameNpmRegistry,
-			Usage:   "NPM registry to use when publishing packages.",
+			Usage:   "NPM registry to use when publishing packages. if empty will use https://registry.npmjs.org/",
 			EnvVars: []string{EnvNameNpmRegistry},
 		},
 		&cli.StringFlag{

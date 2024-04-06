@@ -26,7 +26,7 @@ func TestCheckArgsPlugin(t *testing.T) {
 	var statusNotSupport plugin_npm.NpmPlugin
 	deepCopyByPlugin(&p, &statusNotSupport)
 	statusNotSupport.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
-		wd_mock.WithCurrentPipelineStatus("not_support"),
+		wd_mock.FastCurrentStatus("not_support"),
 	)
 
 	// noArgsUsername
@@ -105,21 +105,21 @@ func TestPlugin(t *testing.T) {
 	var statusFailure plugin_npm.NpmPlugin
 	deepCopyByPlugin(&p, &statusFailure)
 	statusFailure.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
-		wd_mock.WithCurrentPipelineStatus(wd_info.BuildStatusFailure),
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusFailure),
 	)
 
 	// tagPipeline
 	var tagPipeline plugin_npm.NpmPlugin
 	deepCopyByPlugin(&p, &tagPipeline)
 	tagPipeline.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
-		wd_mock.WithFastMockTag("v1.0.0", "new tag"),
+		wd_mock.FastTag("v1.0.0", "new tag"),
 	)
 
 	// pullRequestPipeline
 	var pullRequestPipeline plugin_npm.NpmPlugin
 	deepCopyByPlugin(&p, &pullRequestPipeline)
 	pullRequestPipeline.WoodpeckerInfo = wd_mock.NewWoodpeckerInfo(
-		wd_mock.WithFastMockPullRequest("1", "new pr", "feature-support", "main", "main"),
+		wd_mock.FastPullRequest("1", "new pr", "feature-support", "main", "main"),
 	)
 
 	tests := []struct {
@@ -188,7 +188,7 @@ func mockPluginWithStatus(t *testing.T, status string) plugin_npm.NpmPlugin {
 	// mock woodpecker info
 	//t.Log("mockPluginWithStatus")
 	woodpeckerInfo := wd_mock.NewWoodpeckerInfo(
-		wd_mock.WithCurrentPipelineStatus(status),
+		wd_mock.FastCurrentStatus(status),
 	)
 	p.WoodpeckerInfo = woodpeckerInfo
 

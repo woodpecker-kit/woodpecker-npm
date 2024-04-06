@@ -17,9 +17,13 @@ func skipVerifyCommand() *exec.Cmd {
 	return exec.Command("npm", "config", "set", "strict-ssl", "false")
 }
 
-// whoamiCommand creates a command that gets the currently logged in user.
-func whoamiCommand() *exec.Cmd {
-	return exec.Command("npm", "whoami")
+// whoamiCommand creates a command that gets the currently logged-in user.
+func whoamiCommand(registry string) *exec.Cmd {
+	if registry != "" {
+		return exec.Command("npm", "whoami", "--registry", registry)
+	} else {
+		return exec.Command("npm", "whoami")
+	}
 }
 
 // packageVersionsCommand gets the versions of the npm package.

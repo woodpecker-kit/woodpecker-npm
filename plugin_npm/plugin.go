@@ -257,7 +257,7 @@ func (p *NpmPlugin) authenticate() error {
 
 	// Write whoami command to verify credentials
 	if !p.Settings.SkipWhoAmI {
-		cmds = append(cmds, whoamiCommand())
+		cmds = append(cmds, whoamiCommand(p.Settings.Registry))
 	}
 
 	// Run commands
