@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.1.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.0.1...v1.1.0) (2024-04-07)
+
+### 🐛 Bug Fixes
+
+* skip version check at tag not empty and open `npm-force-tag` ([35286876](https://github.com/woodpecker-kit/woodpecker-npm/commit/352868761426f53e4ba1a0f5400c9e8bb2cb0d6f))
+
+### ✨ Features
+
+* flag `npm-force-tag` check package version by semver and force publish ([c854472a](https://github.com/woodpecker-kit/woodpecker-npm/commit/c854472a902c89c336558e52a6b5d10552ec4815)), fe [#3](https://github.com/woodpecker-kit/woodpecker-npm/issues/3)
+
+* flag `npm-dry-run` to open dry run mode, will not publish to NPM registry ([174a43e4](https://github.com/woodpecker-kit/woodpecker-npm/commit/174a43e4d9dd0e9c04a42477bab2774fe5fada11))
+
+* change .npmrc path, default .npmrc file will write in `npm-folder` ([128057bc](https://github.com/woodpecker-kit/woodpecker-npm/commit/128057bcda9759e14d472d5857c17bd0446e0258))
+
+### 📝 Documentation
+
+* add usage of `npm-tag` ([dfca9ba2](https://github.com/woodpecker-kit/woodpecker-npm/commit/dfca9ba2fe4eb7e87b5b82ea2ce1188250043996)), fe [#1](https://github.com/woodpecker-kit/woodpecker-npm/issues/1)
+
+* update usage of doc/docs.md ([101fafe6](https://github.com/woodpecker-kit/woodpecker-npm/commit/101fafe6b7340ddd3c5e50fc8ed636d22aa71bcf))
+
 ## [1.0.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.0.0...v1.0.1) (2024-04-07)
 
 ### 🐛 Bug Fixes
