@@ -27,13 +27,16 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
 ## Features
 
 - [x] publish npm package by npm cli, so must install npm cli or under nodejs env
-  - by default docker image `node:20.11.1-alpine` for env of nodejs
-  - if you use `local` backend, must install `npm` and `node` at local
+    - by default docker image `node:20.11.1-alpine` for env of nodejs
+    - if you use `local` backend, must install `npm` and `node` at local
 - [x] flag `npm-registry` to set custom npm registry, and support npm whoami check
 - [x] support `npm-token` or `npm-username` and `npm-password` to publish
 - [x] support `npm-tag` to publish, as `latest`
+    - [x] flag `npm-force-tag` true will check the prefix of the prerelase version by semver, when tag name not `latest`
+      or `next` (v1.1+)
 - [x] support `npm-access` to publish scoped package
 - [x] support `npm-folder` to publish, which must containing `package.json`
+- [x] flag `npm-dry-run` will not publish, but will run `npm pack` to generate tarball (v1.1+)
 - [x] can skip `npm whoami` check by open `npm-skip-whoami`
 - [x] can skip `npm ssl` verify by open `npm-skip-verify-ssl`
 - [x] can fail on version conflict by open `npm-fail-on-version-conflict`

@@ -28,6 +28,9 @@ const (
 	CliNameNpmTag = "settings.npm-tag"
 	EnvNameNpmTag = "PLUGIN_NPM_TAG"
 
+	CliNameNpmForceTag = "settings.npm-force-tag"
+	EnvNameNpmForceTag = "PLUGIN_NPM_FORCE_TAG"
+
 	CliNameNpmFolder = "settings.npm-folder"
 	EnvNameNpmFolder = "PLUGIN_NPM_FOLDER"
 
@@ -86,6 +89,13 @@ func GlobalFlag() []cli.Flag {
 			Usage:   "NPM tag to use when publishing packages. this will cover package.json version field.",
 			EnvVars: []string{EnvNameNpmTag},
 		},
+		&cli.BoolFlag{
+			Name:    CliNameNpmForceTag,
+			Usage:   "NPM enable this will check the prefix of the prerelase version by semver, when tag name not `latest` or `next`",
+			Value:   false,
+			EnvVars: []string{EnvNameNpmForceTag},
+		},
+
 		&cli.StringFlag{
 			Name:    CliNameNpmFolder,
 			Usage:   "NPM folder to use when publishing packages which must containing package.json. default will use workspace",
@@ -155,6 +165,7 @@ func BindCliFlags(c *cli.Context,
 		NpmRcUserHomeEnable:   c.Bool(CliNameNpmRCUserHomeEnable),
 		NpmDryRun:             c.Bool(CLiNameNpmDryRun),
 		Tag:                   c.String(CliNameNpmTag),
+		TagForceEnable:        c.Bool(CliNameNpmForceTag),
 		SkipVerifySSL:         c.Bool(CliNameNpmSkipVerifySSL),
 		SkipWhoAmI:            c.Bool(CliNameSkipWhoAmi),
 		FailOnVersionConflict: c.Bool(CliNameFailOnVersionConflict),

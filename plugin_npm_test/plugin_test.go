@@ -16,8 +16,14 @@ import (
 func TestCheckArgsPlugin(t *testing.T) {
 	t.Log("mock NpmPlugin")
 
+	testCaseRootPath, errCreateTestCaseRootPath := testGoldenKit.GetOrCreateTestDataFullPath("check_args")
+	if errCreateTestCaseRootPath != nil {
+		t.Fatal(errCreateTestCaseRootPath)
+	}
+
 	// statusSuccess
 	statusSuccessWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "statusSuccess")),
 		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
 	)
 	statusSuccessSettings := mockPluginSettings()
@@ -25,24 +31,62 @@ func TestCheckArgsPlugin(t *testing.T) {
 	statusSuccessSettings.Password = "bar"
 	statusSuccessSettings.Email = "baz"
 
-	// registryError
-	registryErrorWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+	// tagNamLatestError
+	tagNamLatestErrorWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "tagNamLatestError")),
 		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
 	)
-	registryErrorSettings := mockPluginSettings()
-	registryErrorSettings.Registry = "some////foo.org"
-	registryErrorSettings.Username = "foo"
-	registryErrorSettings.Password = "bar"
-	registryErrorSettings.Email = "baz"
+	tagNamLatestErrorSettings := mockPluginSettings()
+	tagNamLatestErrorSettings.Username = "foo"
+	tagNamLatestErrorSettings.Password = "bar"
+	tagNamLatestErrorSettings.Email = "baz"
+	tagNamLatestErrorSettings.Tag = "latest"
+
+	// tagNamNextError
+	tagNamNextErrorWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "tagNamNextError")),
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	tagNamNextErrorSettings := mockPluginSettings()
+	tagNamNextErrorSettings.Username = "foo"
+	tagNamNextErrorSettings.Password = "bar"
+	tagNamNextErrorSettings.Email = "baz"
+	tagNamNextErrorSettings.Tag = "latest"
+
+	// tagForcePreReleaseError
+	tagForcePreReleaseErrorWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "tagForcePreReleaseError")),
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	tagForcePreReleaseErrorSettings := mockPluginSettings()
+	tagForcePreReleaseErrorSettings.Username = "foo"
+	tagForcePreReleaseErrorSettings.Password = "bar"
+	tagForcePreReleaseErrorSettings.Email = "baz"
+	tagForcePreReleaseErrorSettings.TagForceEnable = true
+	tagForcePreReleaseErrorSettings.Tag = "alpha"
+
+	// tagForcePreReleaseRight
+	tagForcePreReleaseRightWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "tagForcePreReleaseRight")),
+		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
+	)
+	tagForcePreReleaseRightSettings := mockPluginSettings()
+	tagForcePreReleaseRightSettings.Username = "foo"
+	tagForcePreReleaseRightSettings.Password = "bar"
+	tagForcePreReleaseRightSettings.Email = "baz"
+	tagForcePreReleaseRightSettings.TagForceEnable = true
+	tagForcePreReleaseRightSettings.Tag = "alpha"
 
 	// statusNotSupport
 	statusNotSupportWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "statusNotSupport")),
 		wd_mock.FastCurrentStatus("not_support"),
 	)
 	statusNotSupportSettings := mockPluginSettings()
 
 	// noArgsUsername
 	noArgsUsernameWoodpeckerInfo := *wd_mock.NewWoodpeckerInfo(
+		wd_mock.FastWorkSpace(filepath.Join(testCaseRootPath, "noArgsUsername")),
 		wd_mock.FastCurrentStatus(wd_info.BuildStatusSuccess),
 	)
 	noArgsUsernameSettings := mockPluginSettings()
@@ -53,6 +97,8 @@ func TestCheckArgsPlugin(t *testing.T) {
 		woodpeckerInfo wd_info.WoodpeckerInfo
 		settings       plugin_npm.Settings
 
+		packageVersion string
+
 		isDryRun          bool
 		wantArgFlagNotErr bool
 	}{
@@ -60,12 +106,6 @@ func TestCheckArgsPlugin(t *testing.T) {
 			name:              "statusSuccess",
 			woodpeckerInfo:    statusSuccessWoodpeckerInfo,
 			settings:          statusSuccessSettings,
-			wantArgFlagNotErr: true,
-		},
-		{
-			name:              "registryError",
-			woodpeckerInfo:    registryErrorWoodpeckerInfo,
-			settings:          registryErrorSettings,
 			wantArgFlagNotErr: true,
 		},
 		{
@@ -78,11 +118,43 @@ func TestCheckArgsPlugin(t *testing.T) {
 			woodpeckerInfo: noArgsUsernameWoodpeckerInfo,
 			settings:       noArgsUsernameSettings,
 		},
+		{
+			name:           "tagNamLatestError",
+			woodpeckerInfo: tagNamLatestErrorWoodpeckerInfo,
+			settings:       tagNamLatestErrorSettings,
+		},
+		{
+			name:           "tagNamNextError",
+			woodpeckerInfo: tagNamNextErrorWoodpeckerInfo,
+			settings:       tagNamNextErrorSettings,
+		},
+		{
+			name:              "tagForcePreReleaseRight",
+			woodpeckerInfo:    tagForcePreReleaseRightWoodpeckerInfo,
+			settings:          tagForcePreReleaseRightSettings,
+			packageVersion:    "1.0.1-alpha.1",
+			wantArgFlagNotErr: true,
+		},
+		{
+			name:           "tagForcePreReleaseError",
+			woodpeckerInfo: tagForcePreReleaseErrorWoodpeckerInfo,
+			settings:       tagForcePreReleaseErrorSettings,
+			packageVersion: "1.0.1",
+		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			tc.settings.Folder = tc.woodpeckerInfo.BasicInfo.CIWorkspace
 			p := mockPluginWithSettings(t, tc.woodpeckerInfo, tc.settings)
 			p.OnlyArgsCheck()
+
+			if tc.packageVersion != "" {
+				errMockPackageJsonFile := mockPackageJsonFile(p.Settings.RootPath, tc.name, tc.packageVersion, p.Settings.Registry)
+				if errMockPackageJsonFile != nil {
+					t.Fatal(errMockPackageJsonFile)
+				}
+			}
+
 			errPluginRun := p.Exec()
 			if tc.wantArgFlagNotErr {
 				if errPluginRun != nil {
@@ -90,7 +162,6 @@ func TestCheckArgsPlugin(t *testing.T) {
 					wd_log.VerboseJsonf(wdShotInfo, "print WoodpeckerInfoShort")
 					wd_log.VerboseJsonf(p.Settings, "print Settings")
 					t.Fatalf("wantArgFlagNotErr %v\np.Exec() error:\n%v", tc.wantArgFlagNotErr, errPluginRun)
-					return
 				}
 				infoShot := p.ShortInfo()
 				wd_log.VerboseJsonf(infoShot, "print WoodpeckerInfoShort")
@@ -199,7 +270,7 @@ func TestPlugin(t *testing.T) {
 				}
 			}
 			if p.Settings.Registry != "" {
-				errMockPackageJsonFile := mockPackageJsonFile(p.Settings.RootPath, tc.name, p.Settings.Registry)
+				errMockPackageJsonFile := mockPackageJsonFile(p.Settings.RootPath, tc.name, "1.0.0", p.Settings.Registry)
 				if errMockPackageJsonFile != nil {
 					t.Fatal(errMockPackageJsonFile)
 				}
@@ -214,10 +285,10 @@ func TestPlugin(t *testing.T) {
 	}
 }
 
-func mockPackageJsonFile(root, pkgName string, registry string) error {
+func mockPackageJsonFile(root, pkgName, version string, registry string) error {
 	pkgData := pkgJson.PkgJson{
 		Name:    strings.ToLower(pkgName),
-		Version: "1.0.0",
+		Version: version,
 		PublishConfig: pkgJson.NpmConfig{
 			Registry: registry,
 		},

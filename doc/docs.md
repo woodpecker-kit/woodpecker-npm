@@ -31,18 +31,19 @@ woodpecker-npm
 
 ## Settings
 
-| Name           | Required | Default value | Description                                                                                               |
-|----------------|----------|---------------|-----------------------------------------------------------------------------------------------------------|
-| `debug`        | **no**   | *false*       | open debug log or open by env `PLUGIN_DEBUG`                                                              |
-| `npm-registry` | **no**   | *none*        | NPM registry settings if empty will use https://registry.npmjs.org/                                       |
-| `npm-username` | **yes**  | *none*        | NPM username                                                                                              |
-| `npm-password` | **yes**  | *none*        | NPM password                                                                                              |
-| `npm-token`    | **yes**  | *none*        | NPM token to use when publishing packages. if token is set, username and password will be ignored.        |
-| `npm-email`    | **yes**  | *none*        | NPM email                                                                                                 |
-| `npm-folder`   | **no**   | *none*        | folder containing package.json, empty will use workspace                                                  |
-| `npm-dry-run`  | **no**   | *false*       | NPM dry run mode, will not publish to NPM registry (v1.1+)                                                |
-| `npm-tag`      | **no**   | *none*        | NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc. |
-| `npm-access`   | **no**   | *none*        | NPM scoped package access                                                                                 |
+| Name            | Required | Default value | Description                                                                                                                                   |
+|-----------------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `debug`         | **no**   | *false*       | open debug log or open by env `PLUGIN_DEBUG`                                                                                                  |
+| `npm-registry`  | **no**   | *none*        | NPM registry settings if empty will use https://registry.npmjs.org/                                                                           |
+| `npm-username`  | **yes**  | *none*        | NPM username                                                                                                                                  |
+| `npm-password`  | **yes**  | *none*        | NPM password                                                                                                                                  |
+| `npm-token`     | **yes**  | *none*        | NPM token to use when publishing packages. if token is set, username and password will be ignored.                                            |
+| `npm-email`     | **yes**  | *none*        | NPM email                                                                                                                                     |
+| `npm-folder`    | **no**   | *none*        | folder containing package.json, empty will use workspace                                                                                      |
+| `npm-dry-run`   | **no**   | *false*       | NPM dry run mode, will not publish to NPM registry (v1.1+)                                                                                    |
+| `npm-tag`       | **no**   | *none*        | NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc.                                     |
+| `npm-force-tag` | **no**   | *false*       | NPM enable this will check the prefix of the prerelase version by semver, when tag name not `latest` or `next`, open this will force publish. |
+| `npm-access`    | **no**   | *none*        | NPM scoped package access                                                                                                                     |
 
 **custom settings**
 
@@ -165,6 +166,7 @@ steps:
       npm-dry-run: true # dry run mode, will not publish to NPM registry
       ## NPM tag to use when publishing packages. this will cover package.json version field.
       npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, next, etc.
+      npm-force-tag: true # NPM enable this will check the prefix of the prerelase version by semver, when tag name not `latest` or `next`
       ## NPM scoped package access
       npm-access: foo
       ## folder containing package.json, empty will use workspace

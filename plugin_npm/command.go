@@ -1,6 +1,9 @@
 package plugin_npm
 
-import "os/exec"
+import (
+	"fmt"
+	"os/exec"
+)
 
 // versionCommand gets the npm version
 func versionCommand() *exec.Cmd {
@@ -45,6 +48,26 @@ func publishCommand(settings *Settings) *exec.Cmd {
 
 	if settings.NpmDryRun {
 		commandArgs = append(commandArgs, "--dry-run")
+	}
+
+	return exec.Command("npm", commandArgs...)
+}
+
+// unpublishCommand runs the unpublish command
+func unpublishCommand(settings *Settings, name, version string) *exec.Cmd {
+	commandArgs := []string{"unpublish"}
+
+	if settings.Registry != "" {
+		commandArgs = append(commandArgs, "--registry", settings.Registry)
+	}
+
+	commandArgs = append(commandArgs, fmt.Sprintf("%s@%s", name, version))
+
+	if settings.Tag != "" {
+		commandArgs = append(commandArgs, "--tag", settings.Tag)
+		if settings.TagForceEnable {
+			commandArgs = append(commandArgs, "--force")
+		}
 	}
 
 	return exec.Command("npm", commandArgs...)

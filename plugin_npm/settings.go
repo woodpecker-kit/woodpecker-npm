@@ -18,6 +18,11 @@ var (
 		wd_info.BuildStatusError,
 		wd_info.BuildStatusKilled,
 	}
+
+	tagForceNotSupport = []string{
+		"latest",
+		"next",
+	}
 )
 
 type (
@@ -38,13 +43,15 @@ type (
 		Token        string
 		ScopedAccess string
 
-		Folder                string
-		NpmRcUserHomeEnable   bool
+		Folder              string
+		Tag                 string
+		TagForceEnable      bool
+		NpmRcUserHomeEnable bool
+
 		NpmDryRun             bool
 		SkipVerifySSL         bool
 		SkipWhoAmI            bool
 		FailOnVersionConflict bool
-		Tag                   string
 	}
 
 	npmPackage struct {
