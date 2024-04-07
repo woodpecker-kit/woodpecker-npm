@@ -44,11 +44,12 @@ args [registry](https://docs.npmjs.com/cli/v10/using-npm/config#registry)
 
 **custom settings**
 
-| Name                           | Required | Default value | Description                                                         |
-|--------------------------------|----------|---------------|---------------------------------------------------------------------|
-| `npm-fail-on-version-conflict` | **no**   | *false*       | fail NPM publish if version already exists in NPM registry          |
-| `npm-skip-verify-ssl`          | **no**   | *false*       | disables ssl verification when communicating with the NPM registry. |
-| `npm-skip-whoami`              | **no**   | *false*       | Skip npm whoami check                                               |
+| Name                           | Required | Default value | Description                                                                                        |
+|--------------------------------|----------|---------------|----------------------------------------------------------------------------------------------------|
+| `npm-fail-on-version-conflict` | **no**   | *false*       | fail NPM publish if version already exists in NPM registry                                         |
+| `npm-skip-verify-ssl`          | **no**   | *false*       | disables ssl verification when communicating with the NPM registry.                                |
+| `npm-skip-whoami`              | **no**   | *false*       | Skip npm whoami check                                                                              |
+| `npm-rc-user-home-enable`      | **no**   | *false*       | enable .npmrc file write user home, default .npmrc file will write in `npm-folder` (version v1.1+) |
 
 **Hide Settings:**
 
@@ -169,5 +170,7 @@ steps:
       npm-skip-verify-ssl: true
       ## Skip npm whoami check
       npm-skip-whoami: true
+      ## enable `.npmrc` file write at user home, default .npmrc file will write in `npm-folder`
+      npm-rc-user-home-enable: true
 ```
 

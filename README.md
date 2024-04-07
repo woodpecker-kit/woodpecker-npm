@@ -27,8 +27,9 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
 ## Features
 
 - [x] publish npm package by npm cli, so must install npm cli or under nodejs env
-  - [x] by default docker image `node:20.11.1-alpine` for env of nodejs
-  - [ ] if you use `local` backend, must install `npm` and `node` at local
+  - by default docker image `node:20.11.1-alpine` for env of nodejs
+  - if you use `local` backend, must install `npm` and `node` at local
+- [x] flag `npm-registry` to set custom npm registry, and support npm whoami check
 - [x] support `npm-token` or `npm-username` and `npm-password` to publish
 - [x] support `npm-tag` to publish, as `latest`
 - [x] support `npm-access` to publish scoped package
@@ -36,6 +37,7 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
 - [x] can skip `npm whoami` check by open `npm-skip-whoami`
 - [x] can skip `npm ssl` verify by open `npm-skip-verify-ssl`
 - [x] can fail on version conflict by open `npm-fail-on-version-conflict`
+- [x] flag `npm-rc-user-home-enable` will enable `.npmrc` file at user home
 - [ ] more perfect test case coverage
 - [ ] more perfect benchmark case
 

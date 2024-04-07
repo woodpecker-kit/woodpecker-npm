@@ -187,7 +187,7 @@ func TestPlugin(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			p := mockPluginWithSettings(t, tc.woodpeckerInfo, tc.settings)
 			p.Settings.DryRun = tc.isDryRun
-			p.SetMockUserHome(p.Settings.RootPath)
+			//p.SetMockUserHome(p.Settings.RootPath)
 			if tc.ossTransferKey != "" {
 				errGenTransferData := generateTransferStepsOut(
 					p,
