@@ -140,6 +140,12 @@ func (p *NpmPlugin) checkPackageVersionBySemver() error {
 // shouldPublishPackage
 // determines if the package should be published
 func (p *NpmPlugin) shouldPublishPackage() (bool, error) {
+
+	if p.Settings.Tag != "" && p.Settings.TagForceEnable {
+		wd_log.Debugf("skip check package version by semver, tag not empty and force enable")
+		return true, nil
+	}
+
 	cmd := packageVersionsCommand(p.npm.Config.Registry, p.npm.Name)
 	cmd.Dir = p.Settings.Folder
 
