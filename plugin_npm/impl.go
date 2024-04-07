@@ -100,6 +100,18 @@ func (p *NpmPlugin) checkArgs() error {
 		}
 	}
 
+	if p.Settings.Tag != "" {
+		if string_tools.StringInArr(p.Settings.Tag, tagForceNotSupport) {
+			return fmt.Errorf("not support tag name [ %s ], tag name must not be: %v", p.Settings.Tag, tagForceNotSupport)
+		}
+		if p.Settings.TagForceEnable { // check tag force enable
+			errCheckSemver := p.checkPackageVersionBySemver()
+			if errCheckSemver != nil {
+				return fmt.Errorf("check package version by semver, %v", errCheckSemver)
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -161,6 +173,15 @@ func (p *NpmPlugin) doBiz() error {
 
 	if publish {
 		wd_log.Info("Publishing package")
+
+		if p.Settings.TagForceEnable && !p.Settings.DryRun {
+			wd_log.Infof("unpublish package %s@%s", p.npm.Name, p.npm.Version)
+			errUnpublish := runCommand(unpublishCommand(&p.Settings, p.npm.Name, p.npm.Version), p.Settings.Folder)
+			if errUnpublish != nil {
+				return fmt.Errorf("could not unpublish package: %w", errUnpublish)
+			}
+		}
+
 		if err = runCommand(publishCommand(&p.Settings), p.Settings.Folder); err != nil {
 			return fmt.Errorf("could not publish package: %w", err)
 		}

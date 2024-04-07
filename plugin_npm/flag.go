@@ -28,6 +28,9 @@ const (
 	CliNameNpmTag = "settings.npm-tag"
 	EnvNameNpmTag = "PLUGIN_NPM_TAG"
 
+	CliNameNpmForceTag = "settings.npm-force-tag"
+	EnvNameNpmForceTag = "PLUGIN_NPM_FORCE_TAG"
+
 	CliNameNpmFolder = "settings.npm-folder"
 	EnvNameNpmFolder = "PLUGIN_NPM_FOLDER"
 
@@ -45,6 +48,9 @@ const (
 
 	CliNameNpmRCUserHomeEnable = "settings.npm-rc-user-home-enable"
 	EnvNameNpmRCUserHomeEnable = "PLUGIN_NPM_RC_USER_HOME_ENABLE"
+
+	CLiNameNpmDryRun = "settings.npm-dry-run"
+	EnvNameNpmDryRun = "PLUGIN_NPM_DRY_RUN"
 )
 
 // GlobalFlag
@@ -83,6 +89,13 @@ func GlobalFlag() []cli.Flag {
 			Usage:   "NPM tag to use when publishing packages. this will cover package.json version field.",
 			EnvVars: []string{EnvNameNpmTag},
 		},
+		&cli.BoolFlag{
+			Name:    CliNameNpmForceTag,
+			Usage:   "NPM enable this will check the prefix of the prerelase version by semver, when tag name not `latest` or `next`",
+			Value:   false,
+			EnvVars: []string{EnvNameNpmForceTag},
+		},
+
 		&cli.StringFlag{
 			Name:    CliNameNpmFolder,
 			Usage:   "NPM folder to use when publishing packages which must containing package.json. default will use workspace",
@@ -113,6 +126,11 @@ func GlobalFlag() []cli.Flag {
 			Name:    CliNameNpmRCUserHomeEnable,
 			Usage:   fmt.Sprintf("enable .npmrc file write user home, default .npmrc file will write in `%s`", CliNameNpmFolder),
 			EnvVars: []string{EnvNameNpmRCUserHomeEnable},
+		},
+		&cli.BoolFlag{
+			Name:    CLiNameNpmDryRun,
+			Usage:   "dry run mode, will not publish to NPM registry",
+			EnvVars: []string{EnvNameNpmDryRun},
 		},
 	}
 }
@@ -145,7 +163,9 @@ func BindCliFlags(c *cli.Context,
 
 		Folder:                c.String(CliNameNpmFolder),
 		NpmRcUserHomeEnable:   c.Bool(CliNameNpmRCUserHomeEnable),
+		NpmDryRun:             c.Bool(CLiNameNpmDryRun),
 		Tag:                   c.String(CliNameNpmTag),
+		TagForceEnable:        c.Bool(CliNameNpmForceTag),
 		SkipVerifySSL:         c.Bool(CliNameNpmSkipVerifySSL),
 		SkipWhoAmI:            c.Bool(CliNameSkipWhoAmi),
 		FailOnVersionConflict: c.Bool(CliNameFailOnVersionConflict),
