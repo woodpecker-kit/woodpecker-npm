@@ -16,9 +16,10 @@ woodpecker-npm
 - see [package.json define](https://docs.npmjs.com/files/package.json)
 - take `username` and `password` or `token` to publish npm package
 
-must set `package.json`
-by [npm docs package-json.publishconfig](https://docs.npmjs.com/files/package.json#publishconfig)
-args [registry](https://docs.npmjs.com/cli/v10/using-npm/config#registry)
+- add `.npmrc` at git ignore
+- must set `package.json` at path `npm-folder` or workspace
+  by [npm docs package-json.publishconfig](https://docs.npmjs.com/files/package.json#publishconfig)
+  args [registry](https://docs.npmjs.com/cli/v10/using-npm/config#registry)
 
 ```json
 {
@@ -30,17 +31,17 @@ args [registry](https://docs.npmjs.com/cli/v10/using-npm/config#registry)
 
 ## Settings
 
-| Name           | Required | Default value | Description                                                                                        |
-|----------------|----------|---------------|----------------------------------------------------------------------------------------------------|
-| `debug`        | **no**   | *false*       | open debug log or open by env `PLUGIN_DEBUG`                                                       |
-| `npm-registry` | **no**   | *none*        | NPM registry settings if empty will use https://registry.npmjs.org/                                |
-| `npm-username` | **yes**  | *none*        | NPM username                                                                                       |
-| `npm-password` | **yes**  | *none*        | NPM password                                                                                       |
-| `npm-token`    | **yes**  | *none*        | NPM token to use when publishing packages. if token is set, username and password will be ignored. |
-| `npm-email`    | **yes**  | *none*        | NPM email                                                                                          |
-| `npm-tag`      | **no**   | *latest*      | NPM publish tag will cover package.json settings                                                   |
-| `npm-folder`   | **no**   | *none*        | folder containing package.json, empty will use workspace                                           |
-| `npm-access`   | **no**   | *none*        | NPM scoped package access                                                                          |
+| Name           | Required | Default value | Description                                                                                               |
+|----------------|----------|---------------|-----------------------------------------------------------------------------------------------------------|
+| `debug`        | **no**   | *false*       | open debug log or open by env `PLUGIN_DEBUG`                                                              |
+| `npm-registry` | **no**   | *none*        | NPM registry settings if empty will use https://registry.npmjs.org/                                       |
+| `npm-username` | **yes**  | *none*        | NPM username                                                                                              |
+| `npm-password` | **yes**  | *none*        | NPM password                                                                                              |
+| `npm-token`    | **yes**  | *none*        | NPM token to use when publishing packages. if token is set, username and password will be ignored.        |
+| `npm-email`    | **yes**  | *none*        | NPM email                                                                                                 |
+| `npm-folder`   | **no**   | *none*        | folder containing package.json, empty will use workspace                                                  |
+| `npm-tag`      | **no**   | *none*        | NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc. |
+| `npm-access`   | **no**   | *none*        | NPM scoped package access                                                                                 |
 
 **custom settings**
 
@@ -84,10 +85,10 @@ steps:
         from_secret: npm_publish_password
       npm-email: # NPM email
         from_secret: npm_publish_email
-      npm-tag: latest # NPM publish tag will cover package.json settings
       # npm-folder: . # folder containing package.json, empty will use workspace
-      ## NPM scoped package access
-      # npm-access: foo
+      # npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc. do not use latest, next
+      ## fail NPM publish if version already exists in NPM registry, most use in tag publish
+      # npm-fail-on-version-conflict: true
 ```
 
 - workflow with backend `local`, must install at local and effective at evn `PATH`
@@ -123,10 +124,10 @@ steps:
         from_secret: npm_publish_password
       npm-email: # NPM email
         from_secret: npm_publish_email
-      npm-tag: latest # NPM publish tag will cover package.json settings
       # npm-folder: . # folder containing package.json, empty will use workspace
-      ## NPM scoped package access
-      # npm-access: foo
+      # npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, next, etc.
+      ## fail NPM publish if version already exists in NPM registry, most use in tag publish
+      # npm-fail-on-version-conflict: true
 ```
 
 ### settings.debug
@@ -159,11 +160,11 @@ steps:
       npm-email:
         from_secret: npm_publish_email
       ## NPM tag to use when publishing packages. this will cover package.json version field.
-      npm-tag: latest
+      npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, next, etc.
       ## NPM scoped package access
       npm-access: foo
       ## folder containing package.json, empty will use workspace
-      # npm-folder:
+      npm-folder: .
       ## fail NPM publish if version already exists in NPM registry
       npm-fail-on-version-conflict: true
       ## disables ssl verification when communicating with the NPM registry.
