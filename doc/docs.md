@@ -40,6 +40,7 @@ woodpecker-npm
 | `npm-token`    | **yes**  | *none*        | NPM token to use when publishing packages. if token is set, username and password will be ignored.        |
 | `npm-email`    | **yes**  | *none*        | NPM email                                                                                                 |
 | `npm-folder`   | **no**   | *none*        | folder containing package.json, empty will use workspace                                                  |
+| `npm-dry-run`  | **no**   | *false*       | NPM dry run mode, will not publish to NPM registry (v1.1+)                                                |
 | `npm-tag`      | **no**   | *none*        | NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc. |
 | `npm-access`   | **no**   | *none*        | NPM scoped package access                                                                                 |
 
@@ -85,6 +86,7 @@ steps:
         from_secret: npm_publish_password
       npm-email: # NPM email
         from_secret: npm_publish_email
+      # npm-dry-run: true # dry run mode, will not publish to NPM registry
       # npm-folder: . # folder containing package.json, empty will use workspace
       # npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, experimental, etc. do not use latest, next
       ## fail NPM publish if version already exists in NPM registry, most use in tag publish
@@ -124,6 +126,7 @@ steps:
         from_secret: npm_publish_password
       npm-email: # NPM email
         from_secret: npm_publish_email
+      # npm-dry-run: true # dry run mode, will not publish to NPM registry
       # npm-folder: . # folder containing package.json, empty will use workspace
       # npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, next, etc.
       ## fail NPM publish if version already exists in NPM registry, most use in tag publish
@@ -159,6 +162,7 @@ steps:
       ## NPM email
       npm-email:
         from_secret: npm_publish_email
+      npm-dry-run: true # dry run mode, will not publish to NPM registry
       ## NPM tag to use when publishing packages. this will cover package.json version field.
       npm-tag: alpha # NPM publish option to avoid tag being marked as latest, commonly used are beta, alpha, next, etc.
       ## NPM scoped package access

@@ -43,5 +43,9 @@ func publishCommand(settings *Settings) *exec.Cmd {
 		commandArgs = append(commandArgs, "--access", settings.ScopedAccess)
 	}
 
+	if settings.NpmDryRun {
+		commandArgs = append(commandArgs, "--dry-run")
+	}
+
 	return exec.Command("npm", commandArgs...)
 }

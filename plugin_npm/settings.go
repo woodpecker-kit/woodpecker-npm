@@ -40,6 +40,7 @@ type (
 
 		Folder                string
 		NpmRcUserHomeEnable   bool
+		NpmDryRun             bool
 		SkipVerifySSL         bool
 		SkipWhoAmI            bool
 		FailOnVersionConflict bool

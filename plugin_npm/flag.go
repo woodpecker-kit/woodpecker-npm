@@ -45,6 +45,9 @@ const (
 
 	CliNameNpmRCUserHomeEnable = "settings.npm-rc-user-home-enable"
 	EnvNameNpmRCUserHomeEnable = "PLUGIN_NPM_RC_USER_HOME_ENABLE"
+
+	CLiNameNpmDryRun = "settings.npm-dry-run"
+	EnvNameNpmDryRun = "PLUGIN_NPM_DRY_RUN"
 )
 
 // GlobalFlag
@@ -114,6 +117,11 @@ func GlobalFlag() []cli.Flag {
 			Usage:   fmt.Sprintf("enable .npmrc file write user home, default .npmrc file will write in `%s`", CliNameNpmFolder),
 			EnvVars: []string{EnvNameNpmRCUserHomeEnable},
 		},
+		&cli.BoolFlag{
+			Name:    CLiNameNpmDryRun,
+			Usage:   "dry run mode, will not publish to NPM registry",
+			EnvVars: []string{EnvNameNpmDryRun},
+		},
 	}
 }
 
@@ -145,6 +153,7 @@ func BindCliFlags(c *cli.Context,
 
 		Folder:                c.String(CliNameNpmFolder),
 		NpmRcUserHomeEnable:   c.Bool(CliNameNpmRCUserHomeEnable),
+		NpmDryRun:             c.Bool(CLiNameNpmDryRun),
 		Tag:                   c.String(CliNameNpmTag),
 		SkipVerifySSL:         c.Bool(CliNameNpmSkipVerifySSL),
 		SkipWhoAmI:            c.Bool(CliNameSkipWhoAmi),
