@@ -1,6 +1,7 @@
 package plugin_npm
 
 import (
+	"fmt"
 	"github.com/urfave/cli/v2"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_flag"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_info"
@@ -41,6 +42,9 @@ const (
 
 	CliNameFailOnVersionConflict = "settings.npm-fail-on-version-conflict"
 	EnvNameFailOnVersionConflict = "PLUGIN_FAIL_ON_VERSION_CONFLICT"
+
+	CliNameNpmRCUserHomeEnable = "settings.npm-rc-user-home-enable"
+	EnvNameNpmRCUserHomeEnable = "PLUGIN_NPM_RC_USER_HOME_ENABLE"
 )
 
 // GlobalFlag
@@ -105,6 +109,11 @@ func GlobalFlag() []cli.Flag {
 			Usage:   "fail NPM publish if version already exists in NPM registry",
 			EnvVars: []string{EnvNameFailOnVersionConflict},
 		},
+		&cli.BoolFlag{
+			Name:    CliNameNpmRCUserHomeEnable,
+			Usage:   fmt.Sprintf("enable .npmrc file write user home, default .npmrc file will write in `%s`", CliNameNpmFolder),
+			EnvVars: []string{EnvNameNpmRCUserHomeEnable},
+		},
 	}
 }
 
@@ -127,18 +136,19 @@ func BindCliFlags(c *cli.Context,
 		StepsOutDisable:   stepsOutDisable,
 		RootPath:          rootPath,
 
-		Registry: c.String(CliNameNpmRegistry),
-		Username: c.String(CliNameNpmUsername),
-		Password: c.String(CliNameNpmPassword),
-		Email:    c.String(CliNameNpmEmail),
-		Token:    c.String(CliNameNpmToken),
+		Registry:     c.String(CliNameNpmRegistry),
+		Username:     c.String(CliNameNpmUsername),
+		Password:     c.String(CliNameNpmPassword),
+		Email:        c.String(CliNameNpmEmail),
+		Token:        c.String(CliNameNpmToken),
+		ScopedAccess: c.String(CliNameNpmScopedAccess),
 
 		Folder:                c.String(CliNameNpmFolder),
+		NpmRcUserHomeEnable:   c.Bool(CliNameNpmRCUserHomeEnable),
+		Tag:                   c.String(CliNameNpmTag),
 		SkipVerifySSL:         c.Bool(CliNameNpmSkipVerifySSL),
 		SkipWhoAmI:            c.Bool(CliNameSkipWhoAmi),
 		FailOnVersionConflict: c.Bool(CliNameFailOnVersionConflict),
-		Tag:                   c.String(CliNameNpmTag),
-		ScopedAccess:          c.String(CliNameNpmScopedAccess),
 	}
 
 	// set default TimeoutSecond

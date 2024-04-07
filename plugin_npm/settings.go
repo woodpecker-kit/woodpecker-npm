@@ -31,18 +31,19 @@ type (
 
 		DryRun bool
 
-		Registry string
-		Username string
-		Password string
-		Email    string
-		Token    string
+		Registry     string
+		Username     string
+		Password     string
+		Email        string
+		Token        string
+		ScopedAccess string
 
 		Folder                string
+		NpmRcUserHomeEnable   bool
 		SkipVerifySSL         bool
 		SkipWhoAmI            bool
 		FailOnVersionConflict bool
 		Tag                   string
-		ScopedAccess          string
 	}
 
 	npmPackage struct {
