@@ -137,6 +137,7 @@ jobs:
 
       -
         name: Export digest
+        if: ${{ inputs.push_remote_flag }}
         run: |
           mkdir -p /tmp/digests
           digest="${{ fromJSON(steps.bake.outputs.metadata).image['containerimage.digest'] }}"
