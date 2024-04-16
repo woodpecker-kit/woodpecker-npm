@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.2.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.1.0...v1.2.0) (2024-04-17)
+
+### ✨ Features
+
+* change to new docker build pipeline ([443f5e6b](https://github.com/woodpecker-kit/woodpecker-npm/commit/443f5e6b280e5b40da92302484f7094130f9389c))
+
+### 👷‍ Build System
+
+* update `docker-bake.hcl` at `image-all` ([0fd98143](https://github.com/woodpecker-kit/woodpecker-npm/commit/0fd98143bf4ec9d6401f3254ec273c1e09168f05))
+
+* add docker-bake.hcl ([08ed02d8](https://github.com/woodpecker-kit/woodpecker-npm/commit/08ed02d8978e3f13ec7ebfd162e6aa9497a6fc7b))
+
 ## [1.1.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.0.1...v1.1.0) (2024-04-07)
 
 ### 🐛 Bug Fixes

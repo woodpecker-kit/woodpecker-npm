@@ -1,6 +1,6 @@
 {
   "name": "woodpecker-npm",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "publish package by npm for woodpecker-ci",
   "directories": {
     "doc": "doc"
