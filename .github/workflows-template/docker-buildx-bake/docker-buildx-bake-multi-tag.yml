@@ -140,13 +140,16 @@ jobs:
             ${{ inputs.docker_bake_config_file_path }}
             /tmp/bake-meta.json
           targets: image
+          no-cache: true
           provenance: false
+          sbom: false
+          push: ${{ inputs.push_remote_flag }}
           set: |
             *.tags=
             *.platform=${{ matrix.platform }}
             *.cache-from=type=gha,scope=build-${{ env.PLATFORM_PAIR }}
             *.cache-to=type=gha,scope=build-${{ env.PLATFORM_PAIR }}
-            *.output=type=image,"name=${{ vars.ENV_DOCKERHUB_OWNER }}/${{ vars.ENV_DOCKERHUB_REPO_NAME }},ghcr.io/${{ inputs.ghcr_package_owner_name }}/${{ vars.ENV_DOCKERHUB_REPO_NAME }}",push-by-digest=true,name-canonical=true,push=${{ inputs.push_remote_flag }}
+            *.output=type=image,"name=${{ vars.ENV_DOCKERHUB_OWNER }}/${{ vars.ENV_DOCKERHUB_REPO_NAME }},ghcr.io/${{ inputs.ghcr_package_owner_name }}/${{ vars.ENV_DOCKERHUB_REPO_NAME }}",push-by-digest=true,name-canonical=true
 
       -
         name: Export digest
