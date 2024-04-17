@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.2.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.0...v1.2.1) (2024-04-17)
+
+### 🐛 Bug Fixes
+
+* dockerx baka tmp file will be error ([66197624](https://github.com/woodpecker-kit/woodpecker-npm/commit/6619762459cde23c43fa3b0193dbd98804c1f877))
+
+* file update must different from latest and tag ([98ca3f2c](https://github.com/woodpecker-kit/woodpecker-npm/commit/98ca3f2c5872214b8ad00ff6c1473ffef2ca6315))
+
+* change each will push to remote ([d57e33b1](https://github.com/woodpecker-kit/woodpecker-npm/commit/d57e33b1da2cd7b05ce4bbcad007233eb86d3ad3))
+
 ## [1.2.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.1.0...v1.2.0) (2024-04-17)
 
 ### ✨ Features
