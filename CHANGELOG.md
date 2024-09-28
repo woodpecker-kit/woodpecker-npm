@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.2.3](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.2...v1.2.3) (2024-09-28)
+
+### 🐛 Bug Fixes
+
+* fix npm-tag open unpublish then package is not in this registry error ([2d64f089](https://github.com/woodpecker-kit/woodpecker-npm/commit/2d64f0894479b3c49e506e0f7eb6f052f72bd11a)), fix [#24](https://github.com/woodpecker-kit/woodpecker-npm/issues/24)
+
 ## [1.2.2](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.1...v1.2.2) (2024-09-28)
 
 ### 👷‍ Build System
