@@ -144,7 +144,7 @@ func (p *NpmPlugin) doBiz() error {
 	}
 
 	if strings.Compare(p.Settings.Registry, npm.Config.Registry) != 0 {
-		return fmt.Errorf("verify the same registry used settings registry values do not match .drone.yml: %s package.json: %s", p.Settings.Registry, npm.Config.Registry)
+		return fmt.Errorf("verify the same registry in values do not match ci.yml [settings.npm-registry] : %s and package.json [publishConfig.registry] : %s", p.Settings.Registry, npm.Config.Registry)
 	}
 
 	p.npm = npm
@@ -178,7 +178,7 @@ func (p *NpmPlugin) doBiz() error {
 			wd_log.Infof("unpublish package %s@%s", p.npm.Name, p.npm.Version)
 			errUnpublish := runCommand(unpublishCommand(&p.Settings, p.npm.Name, p.npm.Version), p.Settings.Folder)
 			if errUnpublish != nil {
-				return fmt.Errorf("could not unpublish package: %w", errUnpublish)
+				wd_log.Warnf("unpublish package fail: %v", errUnpublish)
 			}
 		}
 
