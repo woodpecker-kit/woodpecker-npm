@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.3.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.3...v1.3.0) (2024-12-21)
+
+### ✨ Features
+
+* update Go version to 1.21 ([fcb5f20f](https://github.com/woodpecker-kit/woodpecker-npm/commit/fcb5f20f5eba3ad3a552691d2f0c8a636c753a5e)), re [#29](https://github.com/woodpecker-kit/woodpecker-npm/issues/29)
+
+### 📝 Documentation
+
+* update contributing guidelines and code of conduct ([2be905dd](https://github.com/woodpecker-kit/woodpecker-npm/commit/2be905dd0dabfe6ad071f1ce9d14a5a84b661f9b))
+
+### 👷‍ Build System
+
+* bump github.com/woodpecker-kit/woodpecker-tools ([e9a7216f](https://github.com/woodpecker-kit/woodpecker-npm/commit/e9a7216fa0961f6ee36101960bbc6a479e258a7d))
+
+* update GitHub release action to v2 ([0667f341](https://github.com/woodpecker-kit/woodpecker-npm/commit/0667f34187618d423d817e9bc07fbbd69c368e07))
+
+* bump github.com/stretchr/testify from 1.9.0 to 1.10.0 ([306dcaeb](https://github.com/woodpecker-kit/woodpecker-npm/commit/306dcaeb7ce2e38c0a6dcb30966e02d92bb33e93))
+
+* bump github.com/Masterminds/semver/v3 from 3.3.0 to 3.3.1 ([87cea69d](https://github.com/woodpecker-kit/woodpecker-npm/commit/87cea69d98a3d4d717e7c146f7e658df5c86d9e7))
+
+* bump github.com/urfave/cli/v2 from 2.27.4 to 2.27.5 ([63804676](https://github.com/woodpecker-kit/woodpecker-npm/commit/6380467688ebbcf2d350519b319067d0b94577e8))
+
 ## [1.2.3](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.2...v1.2.3) (2024-09-28)
 
 ### 🐛 Bug Fixes
