@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.3.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.3.0...v1.3.1) (2025-01-27)
+
+### 👷‍ Build System
+
+* comment out zymosis installation and execution ([170708df](https://github.com/woodpecker-kit/woodpecker-npm/commit/170708df43f0f43e0c4689b89591455b2fbe8b5f))
+
+* bump github.com/woodpecker-kit/woodpecker-tools ([cfe02e54](https://github.com/woodpecker-kit/woodpecker-npm/commit/cfe02e5463024673a82406ae7096444d2b47e09e))
+
 ## [1.3.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.2.3...v1.3.0) (2024-12-21)
 
 ### ✨ Features
