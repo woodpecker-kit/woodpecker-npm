@@ -74,11 +74,6 @@ func (p *NpmPlugin) loadStepsTransfer() error {
 
 func (p *NpmPlugin) checkArgs() error {
 
-	errCheck := argCheckInArr("build status", p.ShortInfo().Build.Status, pluginBuildStateSupport)
-	if errCheck != nil {
-		return errCheck
-	}
-
 	if p.Settings.Token == "" {
 		if p.Settings.Username == "" {
 			return fmt.Errorf("missing username, please set %s", CliNameNpmUsername)
@@ -115,12 +110,12 @@ func (p *NpmPlugin) checkArgs() error {
 	return nil
 }
 
-func argCheckInArr(mark string, target string, checkArr []string) error {
-	if !(string_tools.StringInArr(target, checkArr)) {
-		return fmt.Errorf("not support %s now [ %s ], must in %v", mark, target, checkArr)
-	}
-	return nil
-}
+//func argCheckInArr(mark string, target string, checkArr []string) error {
+//	if !(string_tools.StringInArr(target, checkArr)) {
+//		return fmt.Errorf("not support %s now [ %s ], must in %v", mark, target, checkArr)
+//	}
+//	return nil
+//}
 
 // doBiz
 //

@@ -1,7 +1,5 @@
 package plugin_npm
 
-import "github.com/woodpecker-kit/woodpecker-tools/wd_info"
-
 const (
 	// StepsTransferMarkDemoConfig
 	// steps transfer key
@@ -9,15 +7,15 @@ const (
 )
 
 var (
-	// pluginBuildStateSupport
-	pluginBuildStateSupport = []string{
-		wd_info.BuildStatusCreated,
-		wd_info.BuildStatusRunning,
-		wd_info.BuildStatusSuccess,
-		wd_info.BuildStatusFailure,
-		wd_info.BuildStatusError,
-		wd_info.BuildStatusKilled,
-	}
+	//// pluginBuildStateSupport
+	//pluginBuildStateSupport = []string{
+	//	wd_info.BuildStatusCreated,
+	//	wd_info.BuildStatusRunning,
+	//	wd_info.BuildStatusSuccess,
+	//	wd_info.BuildStatusFailure,
+	//	wd_info.BuildStatusError,
+	//	wd_info.BuildStatusKilled,
+	//}
 
 	tagForceNotSupport = []string{
 		"latest",
