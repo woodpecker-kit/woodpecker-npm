@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.4.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.3.1...v1.4.0) (2025-01-31)
+
+### ✨ Features
+
+* remove unused build status validation ([608c3bae](https://github.com/woodpecker-kit/woodpecker-npm/commit/608c3bae37fa3ae7d52ecdae3037e19346dfe21a)), feat [#33](https://github.com/woodpecker-kit/woodpecker-npm/issues/33)
+
+### 👷‍ Build System
+
+* bump github.com/woodpecker-kit/woodpecker-tools ([d684dcc3](https://github.com/woodpecker-kit/woodpecker-npm/commit/d684dcc398b36cdfc5a9e1e24b67d6c8506a1dd5))
+
 ## [1.3.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.3.0...v1.3.1) (2025-01-27)
 
 ### 👷‍ Build System
