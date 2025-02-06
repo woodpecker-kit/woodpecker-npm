@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.5.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.4.0...v1.5.0) (2025-02-06)
+
+### ✨ Features
+
+* update workflow for Docker Hub and buildx v6 ([ab2a8937](https://github.com/woodpecker-kit/woodpecker-npm/commit/ab2a8937693d70c2b0212e208d2b56bb48d2e427)), feat [#37](https://github.com/woodpecker-kit/woodpecker-npm/issues/37)
+
+### 👷‍ Build System
+
+* update docker-bake.hcl configuration and comments ([2708de18](https://github.com/woodpecker-kit/woodpecker-npm/commit/2708de18961f63fcdd529b6b4a26498a74f2e62d))
+
+* specify zymosis version in Dockerfiles ([0bf927d6](https://github.com/woodpecker-kit/woodpecker-npm/commit/0bf927d621ba80f5b106fde2a70ce4e3ef162296))
+
+* bump docker/bake-action from 5 to 6 ([b760d65d](https://github.com/woodpecker-kit/woodpecker-npm/commit/b760d65db4896e0a20a3015da4adc8dfafa702a1))
+
 ## [1.4.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.3.1...v1.4.0) (2025-01-31)
 
 ### ✨ Features
