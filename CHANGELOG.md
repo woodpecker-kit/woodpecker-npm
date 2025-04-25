@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.6.1](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.6.0...v1.6.1) (2025-04-25)
+
+### 🐛 Bug Fixes
+
+* fix typos and improve formatting in npm plugin documentation ([cbd85455](https://github.com/woodpecker-kit/woodpecker-npm/commit/cbd854559feebfc212b37facefccad33d0bb2961))
+
+### ♻ Refactor
+
+* add debug logging for configuration and processes ([13a101ee](https://github.com/woodpecker-kit/woodpecker-npm/commit/13a101ee68b228baea1d532426d3e560d4a12e3d))
+
+### 👷‍ Build System
+
+* bump version to 1.6.1 ([359ebdef](https://github.com/woodpecker-kit/woodpecker-npm/commit/359ebdefc91fe4e76ee70cc2e7f3b987c9e68b11))
+
 ## [1.6.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.5.0...v1.6.0) (2025-04-25)
 
 ### ✨ Features
