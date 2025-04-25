@@ -106,6 +106,7 @@ func (p *NpmPlugin) checkArgs() error {
 			return fmt.Errorf("not support tag name [ %s ], tag name must not be: %v", p.Settings.Tag, tagForceNotSupport)
 		}
 
+		wd_log.Debugf("npm-auto-prerelase config: %v", p.Settings.TagAutoPrerelease)
 		if p.Settings.TagAutoPrerelease {
 			errChangeVersionByTagAuto := p.changePreReleaseVersionByTagAuto(p.Settings.Folder, p.Settings.Tag)
 			if errChangeVersionByTagAuto != nil {
@@ -113,6 +114,7 @@ func (p *NpmPlugin) checkArgs() error {
 			}
 		}
 
+		wd_log.Debugf("npm-force-tag config: %v", p.Settings.TagForceEnable)
 		if p.Settings.TagForceEnable { // check tag force enable
 			errCheckSemver := p.checkPackageVersionBySemver()
 			if errCheckSemver != nil {
@@ -135,6 +137,7 @@ const (
 //
 //	will try use CI `CI_COMMIT_SHA` first, if not get will use repo git head hash, if not get will use random code
 func (p *NpmPlugin) changePreReleaseVersionByTagAuto(targetPkgFolder string, prereleaseTag string) error {
+	wd_log.Debugf("changePreReleaseVersionByTagAuto start at folder: %s", targetPkgFolder)
 
 	// Verify package.json file exists
 	packagePath := filepath.Join(targetPkgFolder, "package.json")

@@ -121,6 +121,7 @@ func (p *NpmPlugin) authenticate() error {
 
 // checkPackageVersionBySemver
 func (p *NpmPlugin) checkPackageVersionBySemver() error {
+	wd_log.Debugf("checkPackageVersionBySemver start at folder: %s", p.Settings.Folder)
 	// Verify package.json file
 	npm, err := readPackageFile(p.Settings.Folder)
 	if err != nil {
