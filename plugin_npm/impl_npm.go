@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/Masterminds/semver/v3"
+	"github.com/woodpecker-kit/woodpecker-npm/internal/version_check"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_log"
 	"net"
 	"net/url"
@@ -126,13 +126,9 @@ func (p *NpmPlugin) checkPackageVersionBySemver() error {
 	if err != nil {
 		return fmt.Errorf("checkPackageVersionBySemver invalid package.json: %v", err)
 	}
-	targetVersion, errNpmVersion := semver.NewVersion(npm.Version)
-	if errNpmVersion != nil {
-		return fmt.Errorf("checkPackageVersionBySemver can not parse version: %s err: %v", npm.Version, errNpmVersion)
-	}
-	prereleaseInfo := targetVersion.Prerelease()
-	if strings.Index(prereleaseInfo, p.Settings.Tag) != 0 {
-		return fmt.Errorf("checkPackageVersionBySemver npm-tag [ %s ] must be the prefix of the prerelase version: [ %s ]", p.Settings.Tag, npm.Version)
+	errCheckPrerelease := version_check.SemverVersionPrereleasePrefix(npm.Version, p.Settings.Tag)
+	if errCheckPrerelease != nil {
+		return fmt.Errorf("checkPackageVersionBySemver npm-tag [ %s ] must be the suffix of the prerelase version: [ %s ], check err: %v", p.Settings.Tag, npm.Version, errCheckPrerelease)
 	}
 	return nil
 }

@@ -3,6 +3,7 @@ package version_check
 import (
 	"fmt"
 	"github.com/Masterminds/semver/v3"
+	"strings"
 )
 
 // SemverVersionMinimumSupport
@@ -72,6 +73,41 @@ func SemverVersionConstraint(version string, minimumVersion, maximumVersion stri
 	validateOk, errors := checkVersion.Validate(targetVersion)
 	if !validateOk {
 		return fmt.Errorf("semver version: %s not support, err: %v", version, errors)
+	}
+
+	return nil
+}
+
+func SemverVersionPrereleasePrefix(version string, prerelease string) error {
+	if version == "" {
+		return fmt.Errorf("version is empty, please check")
+	}
+	targetVersion, errNewVersion := semver.NewVersion(version)
+	if errNewVersion != nil {
+		return fmt.Errorf("can not parse semver version: %s err: %v", version, errNewVersion)
+	}
+
+	prereleaseInfo := targetVersion.Prerelease()
+
+	_, found := strings.CutPrefix(prereleaseInfo, prerelease)
+	if !found {
+		return fmt.Errorf("semver version want prerelease prefix [ %s ] not start with [ %s ], please check", prerelease, prereleaseInfo)
+	}
+	return nil
+}
+
+func SemverVersionPrereleaseInfoCheck(version string, prerelease string) error {
+	if version == "" {
+		return fmt.Errorf("version is empty, please check")
+	}
+	targetVersion, errNewVersion := semver.NewVersion(version)
+	if errNewVersion != nil {
+		return fmt.Errorf("can not parse semver version: %s err: %v", version, errNewVersion)
+	}
+
+	prereleaseInfo := targetVersion.Prerelease()
+	if prereleaseInfo != prerelease {
+		return fmt.Errorf("semver version want prerelease [ %s ] not match [ %s ], please check", prerelease, prereleaseInfo)
 	}
 
 	return nil
