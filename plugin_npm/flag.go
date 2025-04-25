@@ -100,7 +100,7 @@ func GlobalFlag() []cli.Flag {
 		},
 		&cli.BoolFlag{
 			Name:    CliNameNpmForceTag,
-			Usage:   "NPM enable this will check the prefix of the prerelase version by semver, when tag name not `latest` or `next`",
+			Usage:   "NPM enable this will check the prefix of the prerelease version by semver, when tag name not `latest` or `next`",
 			Value:   false,
 			EnvVars: []string{EnvNameNpmForceTag},
 		},

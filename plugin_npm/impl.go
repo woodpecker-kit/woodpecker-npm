@@ -106,7 +106,7 @@ func (p *NpmPlugin) checkArgs() error {
 			return fmt.Errorf("not support tag name [ %s ], tag name must not be: %v", p.Settings.Tag, tagForceNotSupport)
 		}
 
-		wd_log.Debugf("npm-auto-prerelase config: %v", p.Settings.TagAutoPrerelease)
+		wd_log.Debugf("npm-auto-prerelease config: %v", p.Settings.TagAutoPrerelease)
 		if p.Settings.TagAutoPrerelease {
 			errChangeVersionByTagAuto := p.changePreReleaseVersionByTagAuto(p.Settings.Folder, p.Settings.Tag)
 			if errChangeVersionByTagAuto != nil {
@@ -161,14 +161,14 @@ func (p *NpmPlugin) changePreReleaseVersionByTagAuto(targetPkgFolder string, pre
 		return fmt.Errorf("could unmarshal at: %s, %w", packagePath, errUnmarshal)
 	}
 
-	var prerelaseCode string
+	var prereleaseCode string
 
 	// use CI_COMMIT_SHA first
 	if p.wdShortInfo.Commit.Sha != "" {
 		if len(p.wdShortInfo.Commit.Sha) > preReleaseVersionCodeSize {
-			prerelaseCode = p.wdShortInfo.Commit.Sha[:preReleaseVersionCodeSize]
+			prereleaseCode = p.wdShortInfo.Commit.Sha[:preReleaseVersionCodeSize]
 		} else {
-			prerelaseCode = p.wdShortInfo.Commit.Sha
+			prereleaseCode = p.wdShortInfo.Commit.Sha
 		}
 	} else {
 		_, errIsPathGitManagementRoot := git_info.IsPathGitManagementRoot(p.Settings.RootPath)
@@ -179,32 +179,32 @@ func (p *NpmPlugin) changePreReleaseVersionByTagAuto(targetPkgFolder string, pre
 				if headHash != "" {
 					wd_log.Debugf("current git head hash: %s", headHash)
 					if len(headHash) > preReleaseVersionCodeSize {
-						prerelaseCode = headHash[:preReleaseVersionCodeSize]
+						prereleaseCode = headHash[:preReleaseVersionCodeSize]
 					} else {
-						prerelaseCode = headHash
+						prereleaseCode = headHash
 					}
 				} else {
 					wd_log.Warnf("get git repository head HASH err: %s", p.Settings.RootPath)
-					prerelaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
-					wd_log.Warnf("just use random code: %s", prerelaseCode)
+					prereleaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
+					wd_log.Warnf("just use random code: %s", prereleaseCode)
 				}
 			}
 		} else {
 			wd_log.Warnf("run path not git repository root: %s", p.Settings.RootPath)
-			prerelaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
-			wd_log.Warnf("just use random code: %s", prerelaseCode)
+			prereleaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
+			wd_log.Warnf("just use random code: %s", prereleaseCode)
 		}
 	}
 
-	wd_log.Debugf("prerelaseCode code: %s", prerelaseCode)
-	newVersion := fmt.Sprintf("%s-%s.%s", npmPackageOld.Version, prereleaseTag, prerelaseCode)
+	wd_log.Debugf("prereleaseCode code: %s", prereleaseCode)
+	newVersion := fmt.Sprintf("%s-%s.%s", npmPackageOld.Version, prereleaseTag, prereleaseCode)
 
 	errReplaceVersion := pkgJson.ReplaceJsonVersionByLine(packagePath, newVersion)
 	if errReplaceVersion != nil {
 		return fmt.Errorf("changePreReleaseVersion replace version err: %v", errReplaceVersion)
 	}
 
-	wd_log.Infof("npm-auto-prerelase version to: %s", newVersion)
+	wd_log.Infof("npm-auto-prerelease version to: %s", newVersion)
 
 	return nil
 }

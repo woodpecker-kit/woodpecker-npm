@@ -129,7 +129,7 @@ func (p *NpmPlugin) checkPackageVersionBySemver() error {
 	}
 	errCheckPrerelease := version_check.SemverVersionPrereleasePrefix(npm.Version, p.Settings.Tag)
 	if errCheckPrerelease != nil {
-		return fmt.Errorf("checkPackageVersionBySemver npm-tag [ %s ] must be the suffix of the prerelase version: [ %s ], check err: %v", p.Settings.Tag, npm.Version, errCheckPrerelease)
+		return fmt.Errorf("checkPackageVersionBySemver npm-tag [ %s ] must be the suffix of the prerelease version: [ %s ], check err: %v", p.Settings.Tag, npm.Version, errCheckPrerelease)
 	}
 	return nil
 }

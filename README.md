@@ -32,7 +32,7 @@ Please read [Contributor Guide](.github/CONTRIBUTING_DOC/CONTRIBUTING.md) for mo
 - [x] flag `npm-registry` to set custom npm registry, and support npm whoami check
 - [x] support `npm-token` or `npm-username` and `npm-password` to publish
 - [x] support `npm-tag` to publish, as `latest`
-    - [x] flag `npm-force-tag` true will check the prefix of the prerelase version by semver, when tag name not `latest`
+    - [x] flag `npm-force-tag` true will check the prefix of the prerelease version by semver, when tag name not `latest`
       or `next` (v1.1+)
 - [x] support `npm-access` to publish scoped package
 - [x] support `npm-folder` to publish, which must containing `package.json`
