@@ -194,3 +194,151 @@ func TestSemverVersionConstraint(t *testing.T) {
 		})
 	}
 }
+
+func TestSemverVersionPrereleasePrefix(t *testing.T) {
+	// mock SemverVersionPrereleasePrefix
+	type args struct {
+		version    string
+		prerelease string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantRes string
+		wantErr error
+	}{
+		{
+			name: "empty version",
+			args: args{
+				version:    "",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("version is empty, please check"),
+		},
+		{
+			name: "not support version",
+			args: args{
+				version:    "Semantic Versioning",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("can not parse semver version: Semantic Versioning err: Invalid Semantic Version"),
+		},
+		{
+			name: "not match prerelease",
+			args: args{
+				version:    "1.2.3",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("semver version want prerelease prefix [ alpha ] not start with [  ], please check"),
+		},
+		{
+			name: "not match prerelease diff",
+			args: args{
+				version:    "1.2.3-alpha",
+				prerelease: "beta",
+			},
+			wantErr: fmt.Errorf("semver version want prerelease prefix [ beta ] not start with [ alpha ], please check"),
+		},
+		{
+			name: "contain prerelease alpha",
+			args: args{
+				version:    "1.2.3-alpha",
+				prerelease: "alpha",
+			},
+		},
+		{
+			name: "contain prerelease complicated",
+			args: args{
+				version:    "1.2.3-alpha.1123",
+				prerelease: "alpha",
+			},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+
+			// do SemverVersionPrereleasePrefix
+			gotErr := SemverVersionPrereleasePrefix(tc.args.version, tc.args.prerelease)
+
+			// verify SemverVersionPrereleasePrefix
+			assert.Equal(t, tc.wantErr, gotErr)
+			if tc.wantErr != nil {
+				return
+			}
+		})
+	}
+}
+
+func TestSemverVersionPrereleaseInfoCheck(t *testing.T) {
+	// mock SemverVersionPrerelease
+	type args struct {
+		version    string
+		prerelease string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantRes string
+		wantErr error
+	}{
+		{
+			name: "empty version",
+			args: args{
+				version:    "",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("version is empty, please check"),
+		},
+		{
+			name: "not support version",
+			args: args{
+				version:    "Semantic Versioning",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("can not parse semver version: Semantic Versioning err: Invalid Semantic Version"),
+		},
+		{
+			name: "not match prerelease",
+			args: args{
+				version:    "1.2.3",
+				prerelease: "alpha",
+			},
+			wantErr: fmt.Errorf("semver version want prerelease [ alpha ] not match [  ], please check"),
+		},
+		{
+			name: "not match prerelease diff",
+			args: args{
+				version:    "1.2.3-alpha",
+				prerelease: "beta",
+			},
+			wantErr: fmt.Errorf("semver version want prerelease [ beta ] not match [ alpha ], please check"),
+		},
+		{
+			name: "match prerelease alpha",
+			args: args{
+				version:    "1.2.3-alpha",
+				prerelease: "alpha",
+			},
+		},
+		{
+			name: "match prerelease complicated",
+			args: args{
+				version:    "1.2.3-alpha.1",
+				prerelease: "alpha.1",
+			},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+
+			// do SemverVersionPrerelease
+			gotErr := SemverVersionPrereleaseInfoCheck(tc.args.version, tc.args.prerelease)
+
+			// verify SemverVersionPrerelease
+			assert.Equal(t, tc.wantErr, gotErr)
+			if tc.wantErr != nil {
+				return
+			}
+		})
+	}
+}
