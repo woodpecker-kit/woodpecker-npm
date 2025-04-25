@@ -78,6 +78,9 @@ func SemverVersionConstraint(version string, minimumVersion, maximumVersion stri
 	return nil
 }
 
+// SemverVersionPrereleasePrefix
+// format
+// `<major>.<minor>.<patch>-<prerelease tag>.<prerelease build number>`
 func SemverVersionPrereleasePrefix(version string, prerelease string) error {
 	if version == "" {
 		return fmt.Errorf("version is empty, please check")
@@ -96,6 +99,9 @@ func SemverVersionPrereleasePrefix(version string, prerelease string) error {
 	return nil
 }
 
+// SemverVersionPrereleaseInfoCheck
+// format
+// `<major>.<minor>.<patch>-<prerelease tag>.<prerelease build number>`
 func SemverVersionPrereleaseInfoCheck(version string, prerelease string) error {
 	if version == "" {
 		return fmt.Errorf("version is empty, please check")

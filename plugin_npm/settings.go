@@ -43,6 +43,7 @@ type (
 
 		Folder              string
 		Tag                 string
+		TagAutoPrerelease   bool
 		TagForceEnable      bool
 		NpmRcUserHomeEnable bool
 
