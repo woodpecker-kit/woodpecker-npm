@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [convention-change-log](https://github.com/convention-change/convention-change-log) for commit guidelines.
 
+## [1.6.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.5.0...v1.6.0) (2025-04-25)
+
+### ✨ Features
+
+* add `npm-auto-prerelease` functionality ([7d40b3a9](https://github.com/woodpecker-kit/woodpecker-npm/commit/7d40b3a96ee5bf450b8b58527e2711c5497709e9))
+
+* prerelease info check and show clear ([42492d81](https://github.com/woodpecker-kit/woodpecker-npm/commit/42492d8109ea0f1c77f5b1a4d01adea83b755005))
+
+### 📝 Documentation
+
+* add comments for semver version functions ([75e9f15f](https://github.com/woodpecker-kit/woodpecker-npm/commit/75e9f15f2c332b301db20cb0bb216c1ba819f202))
+
+### 👷‍ Build System
+
+* update dependabot configuration ([147344c1](https://github.com/woodpecker-kit/woodpecker-npm/commit/147344c1b7785621026ebcf089cc2500e42ea100))
+
+* bump github.com/woodpecker-kit/woodpecker-tools ([fd594f7c](https://github.com/woodpecker-kit/woodpecker-npm/commit/fd594f7c545d573846fd9602af094b20fe8b6a36))
+
+* bump github.com/urfave/cli/v2 from 2.27.5 to 2.27.6 ([72b283a2](https://github.com/woodpecker-kit/woodpecker-npm/commit/72b283a23149106430ac0048aa446d856f23ac7a))
+
 ## [1.5.0](https://github.com/woodpecker-kit/woodpecker-npm/compare/1.4.0...v1.5.0) (2025-02-06)
 
 ### ✨ Features
