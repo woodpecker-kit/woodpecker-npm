@@ -28,6 +28,9 @@ const (
 	CliNameNpmTag = "settings.npm-tag"
 	EnvNameNpmTag = "PLUGIN_NPM_TAG"
 
+	CliNameNpmAutoPrerelease = "settings.npm-auto-prerelease"
+	EnvNameNpmAutoPrerelease = "PLUGIN_NPM_AUTO_PRERELEASE"
+
 	CliNameNpmForceTag = "settings.npm-force-tag"
 	EnvNameNpmForceTag = "PLUGIN_NPM_FORCE_TAG"
 
@@ -88,6 +91,12 @@ func GlobalFlag() []cli.Flag {
 			Name:    CliNameNpmTag,
 			Usage:   "NPM tag to use when publishing packages. this will cover package.json version field.",
 			EnvVars: []string{EnvNameNpmTag},
+		},
+		&cli.BoolFlag{
+			Name:    CliNameNpmAutoPrerelease,
+			Usage:   "use `npm-tag` to replace package.json version by VCS commit, when tag name not `latest` or `next` (v1.6.+)",
+			Value:   false,
+			EnvVars: []string{EnvNameNpmAutoPrerelease},
 		},
 		&cli.BoolFlag{
 			Name:    CliNameNpmForceTag,
@@ -165,6 +174,7 @@ func BindCliFlags(c *cli.Context,
 		NpmRcUserHomeEnable:   c.Bool(CliNameNpmRCUserHomeEnable),
 		NpmDryRun:             c.Bool(CLiNameNpmDryRun),
 		Tag:                   c.String(CliNameNpmTag),
+		TagAutoPrerelease:     c.Bool(CliNameNpmAutoPrerelease),
 		TagForceEnable:        c.Bool(CliNameNpmForceTag),
 		SkipVerifySSL:         c.Bool(CliNameNpmSkipVerifySSL),
 		SkipWhoAmI:            c.Bool(CliNameSkipWhoAmi),

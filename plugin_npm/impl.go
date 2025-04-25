@@ -1,14 +1,20 @@
 package plugin_npm
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/sinlov-go/go-common-lib/pkg/string_tools"
 	"github.com/sinlov-go/go-common-lib/pkg/struct_kit"
+	"github.com/sinlov-go/go-git-tools/git_info"
+	"github.com/sinlov-go/unittest-kit/unittest_random_kit"
+	"github.com/woodpecker-kit/woodpecker-npm/internal/pkgJson"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_flag"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_info"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_log"
 	"github.com/woodpecker-kit/woodpecker-tools/wd_short_info"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -99,6 +105,14 @@ func (p *NpmPlugin) checkArgs() error {
 		if string_tools.StringInArr(p.Settings.Tag, tagForceNotSupport) {
 			return fmt.Errorf("not support tag name [ %s ], tag name must not be: %v", p.Settings.Tag, tagForceNotSupport)
 		}
+
+		if p.Settings.TagAutoPrerelease {
+			errChangeVersionByTagAuto := p.changePreReleaseVersionByTagAuto(p.Settings.Folder, p.Settings.Tag)
+			if errChangeVersionByTagAuto != nil {
+				return fmt.Errorf("check package version by semver, %v", errChangeVersionByTagAuto)
+			}
+		}
+
 		if p.Settings.TagForceEnable { // check tag force enable
 			errCheckSemver := p.checkPackageVersionBySemver()
 			if errCheckSemver != nil {
@@ -106,6 +120,88 @@ func (p *NpmPlugin) checkArgs() error {
 			}
 		}
 	}
+
+	return nil
+}
+
+const (
+	preReleaseVersionCodeSize = 8
+)
+
+// changePreReleaseVersionByTagAuto
+// format:
+//
+//	`<major>.<minor>.<patch>-<prerelease tag>.<prerelease build number>`
+//
+//	will try use CI `CI_COMMIT_SHA` first, if not get will use repo git head hash, if not get will use random code
+func (p *NpmPlugin) changePreReleaseVersionByTagAuto(targetPkgFolder string, prereleaseTag string) error {
+
+	// Verify package.json file exists
+	packagePath := filepath.Join(targetPkgFolder, "package.json")
+	info, err := os.Stat(packagePath)
+
+	if os.IsNotExist(err) {
+		return fmt.Errorf("changePreReleaseVersion no package.json at %s: %w", packagePath, err)
+	}
+	if info.IsDir() {
+		return fmt.Errorf("changePreReleaseVersion the package.json at %s is a directory", packagePath)
+	}
+
+	fileReadOld, err := os.ReadFile(packagePath)
+	if err != nil {
+		return fmt.Errorf("could not read package.json at %s: %w", packagePath, err)
+	}
+
+	npmPackageOld := npmPackage{}
+	errUnmarshal := json.Unmarshal(fileReadOld, &npmPackageOld)
+	if errUnmarshal != nil {
+		return fmt.Errorf("could unmarshal at: %s, %w", packagePath, errUnmarshal)
+	}
+
+	var prerelaseCode string
+
+	// use CI_COMMIT_SHA first
+	if p.wdShortInfo.Commit.Sha != "" {
+		if len(p.wdShortInfo.Commit.Sha) > preReleaseVersionCodeSize {
+			prerelaseCode = p.wdShortInfo.Commit.Sha[:preReleaseVersionCodeSize]
+		} else {
+			prerelaseCode = p.wdShortInfo.Commit.Sha
+		}
+	} else {
+		_, errIsPathGitManagementRoot := git_info.IsPathGitManagementRoot(p.Settings.RootPath)
+		if errIsPathGitManagementRoot == nil {
+			headInfo, errRepositoryHeadByPath := git_info.RepositoryHeadByPath(p.Settings.RootPath)
+			if errRepositoryHeadByPath == nil {
+				headHash := headInfo.Hash().String()
+				if headHash != "" {
+					wd_log.Debugf("current git head hash: %s", headHash)
+					if len(headHash) > preReleaseVersionCodeSize {
+						prerelaseCode = headHash[:preReleaseVersionCodeSize]
+					} else {
+						prerelaseCode = headHash
+					}
+				} else {
+					wd_log.Warnf("get git repository head HASH err: %s", p.Settings.RootPath)
+					prerelaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
+					wd_log.Warnf("just use random code: %s", prerelaseCode)
+				}
+			}
+		} else {
+			wd_log.Warnf("run path not git repository root: %s", p.Settings.RootPath)
+			prerelaseCode = unittest_random_kit.RandomStr(preReleaseVersionCodeSize)
+			wd_log.Warnf("just use random code: %s", prerelaseCode)
+		}
+	}
+
+	wd_log.Debugf("prerelaseCode code: %s", prerelaseCode)
+	newVersion := fmt.Sprintf("%s-%s.%s", npmPackageOld.Version, prereleaseTag, prerelaseCode)
+
+	errReplaceVersion := pkgJson.ReplaceJsonVersionByLine(packagePath, newVersion)
+	if errReplaceVersion != nil {
+		return fmt.Errorf("changePreReleaseVersion replace version err: %v", errReplaceVersion)
+	}
+
+	wd_log.Infof("npm-auto-prerelase version to: %s", newVersion)
 
 	return nil
 }
